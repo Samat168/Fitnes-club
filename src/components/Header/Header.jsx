@@ -92,7 +92,7 @@ const Header = () => {
               {user && user.email == ADMIN ? (
                 <li>
                   <NavLink
-                    to="/admin"
+                    to="/adminn"
                     onClick={() => setMenuOpen(false)}
                     span={true}
                     smooth={true}

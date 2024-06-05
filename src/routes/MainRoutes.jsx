@@ -27,7 +27,7 @@ const MainRoutes = () => {
       id: 3,
     },
     {
-      link: "/admin",
+      link: "/adminn",
       element: <AdminPage />,
       id: 4,
     },
