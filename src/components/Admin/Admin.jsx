@@ -26,8 +26,23 @@ const Admin = () => {
 
     const data = [];
     query.forEach((doc) => {
-      const { displayName, abonement, trener, polsov } = doc.data(); // Получаем данные из документа
-      data.push({ id: doc.id, displayName, abonement, trener, polsov }); // Создаем объект данных с нужными свойствами
+      const {
+        displayName,
+        abonement,
+        trener,
+        polsov,
+        createdAt,
+        expirationDate,
+      } = doc.data(); // Получаем данные из документа
+      data.push({
+        id: doc.id,
+        displayName,
+        abonement,
+        trener,
+        polsov,
+        createdAt: createdAt ? createdAt.toDate() : null, // Преобразуем timestamp в Date
+        expirationDate: expirationDate ? expirationDate.toDate() : null, // Преобразуем timestamp в Date
+      });
     });
 
     return data;
@@ -121,6 +136,8 @@ const Admin = () => {
               <th>Email</th>
               <th>Aбонемент</th>
               <th>Тренер</th>
+              <th>Дата начала</th>
+              <th>Дата окончания</th>
               <th>Действия</th>
             </tr>
           </thead>
@@ -131,6 +148,16 @@ const Admin = () => {
                 <td data-label="Email">{users.polsov}</td>
                 <td data-label="Aбонемент">{users.abonement}</td>
                 <td data-label="Тренер">{users.trener}</td>
+                <td data-label="Дата начала">
+                  {users.createdAt
+                    ? users.createdAt.toLocaleDateString()
+                    : "N/A"}
+                </td>
+                <td data-label="Дата окончания">
+                  {users.expirationDate
+                    ? users.expirationDate.toLocaleDateString()
+                    : "N/A"}
+                </td>
                 <td data-label="Действия">
                   <button
                     style={editButtonStyle}
@@ -164,6 +191,7 @@ const Admin = () => {
           </div>
         </div>
       </div>
+      <div></div>
       <Footer />
     </div>
   );
