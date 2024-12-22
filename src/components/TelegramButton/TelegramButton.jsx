@@ -15,7 +15,7 @@ const TelegramButton = () => {
         borderRadius: "25px",
       }}
     >
-      <a href="https://web.telegram.org/k/#-4156658953" target="blank">
+      <a href="https://web.telegram.org/k/" target="blank">
         <TelegramIcon style={{ color: "black" }} />
       </a>
     </div>

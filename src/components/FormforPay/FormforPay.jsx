@@ -8,7 +8,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./FormforPay.css";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
@@ -19,18 +19,14 @@ import { Context } from "../..";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import firebase from "firebase/compat/app";
-const trainers = ["Касимов Рашид", "Медербеков Мирбек", "Азамат Мирбеков"]; // данные для тренеров
-const subscriptions = [
-  "BASIC(Абонемент на месяц)",
-  "PREMIUM(Абонемент на месяц)",
-  "PRO(Абонемент на месяц)",
-]; // данные для абонементов
 
 const FormforPay = () => {
   const { auth, firestore } = useContext(Context);
   const [user] = useAuthState(auth);
   const [item, setItem] = useState("");
   const [numCard, setNumCard] = useState("");
+  const [trainers, setTrainers] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
   const [date, setDate] = useState("");
   const [year, setYear] = useState("");
   const [cvv, setCvv] = useState("");
@@ -43,6 +39,31 @@ const FormforPay = () => {
   const sendMessage = async () => {
     console.log();
   };
+
+  // Получение данных тренеров и абонементов
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Получение данных тренеров
+        const trainerSnap = await firestore.collection("trainers").get();
+        const trainerList = trainerSnap.docs.map((doc) => doc.data().name);
+        setTrainers(trainerList);
+
+        // Получение данных абонементов
+        const subscriptionSnap = await firestore
+          .collection("subscriptions")
+          .get();
+        const subscriptionList = subscriptionSnap.docs.map(
+          (doc) => doc.data().title
+        );
+        setSubscriptions(subscriptionList);
+      } catch (error) {
+        console.error("Ошибка при загрузке данных:", error);
+      }
+    };
+
+    fetchData();
+  }, [firestore]);
 
   const navigate = useNavigate();
 
@@ -163,9 +184,9 @@ const FormforPay = () => {
                     value={subscription}
                     onChange={(event) => setSubscription(event.target.value)}
                   >
-                    {subscriptions.map((subscription, index) => (
-                      <MenuItem key={index} value={subscription}>
-                        {subscription}
+                    {subscriptions.map((title, index) => (
+                      <MenuItem key={index} value={title}>
+                        {title}
                       </MenuItem>
                     ))}
                   </Select>
